@@ -1,33 +1,30 @@
-# my-gdx-game
+# Brick Breaker
 
-A [libGDX](https://libgdx.com/) project generated with [gdx-liftoff](https://github.com/libgdx/gdx-liftoff).
+🚧 **Work in progress**
 
-This project was generated with a template including simple application launchers and an `ApplicationAdapter` extension that draws libGDX logo.
+My second game with [libGDX](https://libgdx.com/). The goal is a brick breaker: bounce a ball off a paddle and smash all the bricks. Right now it's still bouncing balls around the screen, but that's where it starts.
 
-## Platforms
+I'm following the [Hello libGDX](https://colourtann.github.io/HelloLibgdx/) tutorial, which has three parts.
 
-- `core`: Main module with the application logic shared by all platforms.
-- `lwjgl3`: Primary desktop platform using LWJGL3; was called 'desktop' in older docs.
+## Progress
 
-## Gradle
+- [x] **Part 1: Bouncing balls** 
+- [ ] **Part 2: Brick breaker** (in progress)
+- [ ] **Part 3**
 
-This project uses [Gradle](https://gradle.org/) to manage dependencies.
-The Gradle wrapper was included, so you can run Gradle tasks using `gradlew.bat` or `./gradlew` commands.
-Useful Gradle tasks and flags:
+## Run it
 
-- `--continue`: when using this flag, errors will not stop the tasks from running.
-- `--daemon`: thanks to this flag, Gradle daemon will be used to run chosen tasks.
-- `--offline`: when using this flag, cached dependency archives will be used.
-- `--refresh-dependencies`: this flag forces validation of all dependencies. Useful for snapshot versions.
-- `build`: builds sources and archives of every project.
-- `cleanEclipse`: removes Eclipse project data.
-- `cleanIdea`: removes IntelliJ project data.
-- `clean`: removes `build` folders, which store compiled classes and built archives.
-- `eclipse`: generates Eclipse project data.
-- `idea`: generates IntelliJ project data.
-- `lwjgl3:jar`: builds application's runnable jar, which can be found at `lwjgl3/build/libs`.
-- `lwjgl3:run`: starts the application.
-- `test`: runs unit tests (if any).
+You need Java 17 or newer.
 
-Note that most tasks that are not specific to a single project can be run with `name:` prefix, where the `name` should be replaced with the ID of a specific project.
-For example, `core:clean` removes `build` folder only from the `core` project.
+```
+gradlew lwjgl3:run
+```
+
+## What I've learned so far
+
+- **Drawing without images.** `ShapeRenderer` draws circles and rectangles directly, no textures needed. It works like `SpriteBatch`: `begin()`, draw, `end()`.
+- **Clearing the screen.** Without clearing every frame, a moving circle leaves a trail behind it.
+- **Bouncing.** When the ball goes past an edge, `xSpeed = -xSpeed` flips its direction. A minus of a minus is a plus, so it works both ways.
+- **Getting the condition right.** `x < 0 || x > width` means "out on the left or out on the right". I had it the wrong way round at first and the ball just jittered in place.
+- **Putting the ball in its own class.** `Ball` keeps its own position, size and speed, with `update()` for movement and `draw()` for drawing.
+- **Lots of balls.** An `ArrayList<Ball>` filled with random positions, sizes and speeds, updated and drawn in a loop.
