@@ -1,6 +1,6 @@
 # Brick Breaker
 
-🚧 **Work in progress**
+**Work in progress**
 
 My second game with [libGDX](https://libgdx.com/). The goal is a brick breaker: bounce a ball off a paddle and smash all the bricks. Right now it's still bouncing balls around the screen, but that's where it starts.
 
@@ -8,9 +8,9 @@ I'm following the [Hello libGDX](https://colourtann.github.io/HelloLibgdx/) tuto
 
 ## Progress
 
-- [x] **Part 1: Bouncing balls** 
-- [ ] **Part 2: Brick breaker** (in progress)
-- [ ] **Part 3**
+- [x] **Part 1: Bouncey circles** 
+- [ ] **Part 2: Almost Breakout!** (in progress)
+- [ ] **Part 3: Breakout!**
 
 ## Run it
 
