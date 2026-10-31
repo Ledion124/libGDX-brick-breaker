@@ -39,16 +39,25 @@ public class Ball {
     }
 
     public void collisionCheck(Paddle paddle){
-        if(collidesWith(paddle)){
+        if(collidesWith(paddle.x, paddle.y, paddle.width, paddle.height)){
             ySpeed = -ySpeed;
         }
     }
-    private boolean collidesWith(Paddle paddle) { // gets the real paddle from MyGdxGame to check against
+    // works for anything shaped like a rectangle
+    private boolean collidesWith(int rx, int ry, int rw, int rh) {
+        if (x + size < rx) return false;        // fully left
+        if (x - size > rx + rw) return false;   // fully right
+        if (y + size < ry) return false;        // fully below
+        if (y - size > ry + rh) return false;   // fully above
+        return true;                            // touching
+    }
 
-        if (x + size < paddle.x) return false; // ball's right side is left of the paddle's left side → ball is fully left
-        else if(x - size > paddle.x + paddle.width) return false;  // ball's left side is right of the paddle's right side → ball is fully right
-        else if(y + size < paddle.y) return false; // ball's top is below the paddle's bottom → ball is fully below
-        else if (y - size > paddle.y + paddle.height) return false; // ball's bottom is above the paddle's top → ball is fully above
-        else return true;
+
+
+    public void collisionCheck(Block block) {
+        if(collidesWith(block.x, block.y, block.width, block.height)){
+            ySpeed = - ySpeed;
+            block.destroyed = true;
+        }
     }
 }

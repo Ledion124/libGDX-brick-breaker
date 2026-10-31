@@ -1,16 +1,14 @@
 # Brick Breaker
 
-**Work in progress**
+My second game with [libGDX](https://libgdx.com/). A brick breaker: bounce the ball off your paddle and smash all the bricks.
 
-My second game with [libGDX](https://libgdx.com/). The goal is a brick breaker: bounce a ball off a paddle and smash all the bricks. Right now there's a ball and a paddle you control with the mouse. The bricks come next.
-
-I'm following the [Hello libGDX](https://colourtann.github.io/HelloLibgdx/) tutorial, which has three parts.
+I made it by following the [Hello libGDX](https://colourtann.github.io/HelloLibgdx/) tutorial, which has three parts.
 
 ## Progress
 
 - [x] **Part 1: Bouncey circles**
 - [x] **Part 2: Almost Breakout!**
-- [ ] **Part 3: Breakout!**
+- [x] **Part 3: Breakout!**
 
 ## Run it
 
@@ -80,7 +78,58 @@ To test it, the ball turned green while touching the paddle. Once that worked, I
 - **The paddle's position was always 0.** I wrote `int x = ...` inside `update()`, which made a new local variable instead of setting the paddle's field. Local variables disappear when the method ends, so the ball never saw the real position. Removing `int` fixed it.
 - **The paddle only read the mouse once.** I read `getY()` in `create()`, which only runs once. Anything that should follow the mouse has to be read every frame.
 
-### Known issues
+## Part 3: Breakout!
+
+### The blocks
+
+A `Block` class, a lot like the paddle: a position, a size and a `draw()` method. The blocks are built with two loops, one inside the other:
+
+```java
+for (int y = height / 2; y < height; y += blockHeight + 10) {   // rows: from the middle up to the top
+    for (int x = 0; x < width; x += blockWidth + 10) {           // columns: from left to right
+        blocks.add(new Block(x, y, blockWidth, blockHeight));
+    }
+}
+```
+
+The outer loop picks the row, the inner loop fills that row from left to right, then it moves up to the next row. The `+ 10` leaves a gap between the blocks.
+
+### One collision check for everything
+
+The tutorial says you can just copy the paddle collision method for the blocks. I made it general instead. The check only needs a rectangle, so it takes `x`, `y`, `width` and `height`:
+
+```java
+private boolean collidesWith(int rx, int ry, int rw, int rh)
+```
+
+Now the paddle and the blocks use the same method:
+
+```java
+collidesWith(paddle.x, paddle.y, paddle.width, paddle.height)
+collidesWith(block.x, block.y, block.width, block.height)
+```
+
+### Breaking blocks
+
+When the ball hits a block, it bounces and the block gets marked with `destroyed = true`. After the collision checks, the destroyed blocks are removed from the list:
+
+```java
+for (int i = 0; i < blocks.size(); i++) {
+    Block b = blocks.get(i);
+    if (b.destroyed) {
+        blocks.remove(b);
+        i--;
+    }
+}
+```
+
+The `i--` matters. When a block is removed, everything after it slides one spot to the left. Without `i--`, the loop would skip the block that slid into the empty spot.
+
+### Parameters vs. fields
+
+The ball needs to know where the paddle is, so I pass it in: `checkCollision(paddle)`. The parameter points to the **same** paddle, not a copy, so the ball sees its real position. Making a `new Paddle()` inside the method would create a different paddle at (0, 0).
+
+## Known issues
 
 - Corners aren't perfect, because the ball is treated like a square for the collision check.
-- If the ball hits the paddle from the side, it can get stuck and jitter.
+- If the ball hits the paddle or a block from the side, it can get stuck and jitter.
